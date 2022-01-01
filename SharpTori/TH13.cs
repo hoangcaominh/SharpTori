@@ -117,4 +117,5 @@ namespace SharpTori
 
             return _tranceCount;
         }
+    }
 }
