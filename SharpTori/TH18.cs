@@ -91,7 +91,7 @@ namespace SharpTori
                 Console.WriteLine("Failed to read memory of bomb state.");
 
             // if bomb state changes to 1, increase bomb count by 1
-            if (_playerState.Trigger((prev, curr) => prev != curr && curr == 1))
+            if (_bombState.Trigger((prev, curr) => prev != curr && curr == 1))
                 _bombCount++;
             _bombState.Update();
 
