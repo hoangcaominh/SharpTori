@@ -17,8 +17,7 @@ namespace Test
         [Test]
         public void TestInt()
         {
-            Type intType = typeof(int);
-            Assert.AreEqual(intType, _sample.ConvertToType(intType).GetType());
+            Assert.AreEqual(typeof(int), _sample.ToStructure<int>().GetType());
         }
     }
 }
