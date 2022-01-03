@@ -55,7 +55,7 @@ namespace SharpTori
             return _difficulty;
         }
 
-        public byte GetMainShot()
+        public byte GetStage()
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B4D14 }, ref _stage, sizeof(byte)))
                 Console.WriteLine("Failed to read memory of stage.");
