@@ -30,8 +30,12 @@ namespace SharpTori
         {
             Process process = Process.GetProcessesByName(processName).FirstOrDefault();
 
-            // Return IntPtr.Zero if no process is found.
-            return (process != null) ? process.Handle : IntPtr.Zero;
+            // Return IntPtr.Zero if there is no process
+            if (process == null)
+                return IntPtr.Zero;
+
+            // Open process and get handle
+            return OpenProcess(0x1010, false, process.Id); // PROCESS_VM_READ | PROCESS_QUERY_LIMITED_INFORMATION
         }
 
         /// <summary>
