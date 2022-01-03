@@ -95,7 +95,7 @@ namespace SharpTori
             return _bombCount + _deathbombCount;
         }
 
-        public int GetBorderBreakCount()
+        public int GetSpellCapturedCount()
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0160F510, 0x1C }, ref _spellCapturedCount, sizeof(int)))
                 Console.WriteLine("Failed to read memory of number of spells captured.");
