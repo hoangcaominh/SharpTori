@@ -124,12 +124,12 @@ namespace SharpTori
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B5AC4 }, ref _hyperState, sizeof(byte)))
                 Console.WriteLine("Failed to read memory of hyper state.");
 
-            _hyperActive.State &= 1 << 1;
-            _hyperBreak.State &= 1 << 2;
+            _hyperActive.State = (byte)(_hyperState & (1 << 1));
+            _hyperBreak.State = (byte)(_hyperState & (1 << 2));
 
-            // if bit 2 of hyper state is set, the player is in hyper mode
-            // if bit 3 of hyper state is set, the player breaks the hyper
-            if (_hyperActive.Trigger((prev, curr) => (prev ^ curr) != 0 && curr != 0))
+            // if bit 1 of hyper state is set, the player is in hyper mode
+            // if bit 2 of hyper state is set, the player breaks the hyper
+            if (_hyperActive.Trigger((prev, curr) => prev != curr && curr != 0))
                 if (_hyperType == 1)
                     _hyperCount.Wolf++;
                 else if (_hyperType == 2)
@@ -138,7 +138,7 @@ namespace SharpTori
                     _hyperCount.Eagle++;
                 else if (_hyperType == 4)
                     _hyperCount.Neutral++;
-            if (_hyperBreak.Trigger((prev, curr) => (prev ^ curr) != 0 && curr != 0))
+            if (_hyperBreak.Trigger((prev, curr) => prev != curr && curr != 0))
                 _hyperCount.Break++;
 
             _hyperActive.Update();
