@@ -12,6 +12,7 @@ namespace SharpTori
             public int Wolf, Otter, Eagle, Neutral, Break;
         }
 
+        private uint _pGui;
         private THState<uint> _pGuiState;
         private byte _difficulty, _mainShot, _subShot;
         private uint _score;
@@ -41,10 +42,14 @@ namespace SharpTori
             _hyperCount = new HyperCount { Wolf = 0, Otter = 0, Eagle = 0, Neutral = 0, Break = 0 };
         }
 
+        public override bool IsInGame()
+        {
+            return GetGuiPointer() != 0;
+        }
+
         public override bool IsNewGame()
         {
-            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B76AC }, ref _pGuiState.State, sizeof(uint)))
-                Console.WriteLine("Failed to read memory of gui pointer.");
+            _pGuiState.State = GetGuiPointer();
 
             // A new gui instance is allocated
             bool result = _pGuiState.Trigger((prev, curr) => prev != curr && curr != 0);
@@ -147,6 +152,13 @@ namespace SharpTori
             _hyperBreak.Update();
 
             return _hyperCount;
+        }
+
+        private uint GetGuiPointer()
+        {
+            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B76AC }, ref _pGui, sizeof(uint)))
+                Console.WriteLine("Failed to read memory of gui pointer.");
+            return _pGui;
         }
     }
 }

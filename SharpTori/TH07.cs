@@ -7,6 +7,7 @@ namespace SharpTori
     /// </summary>
     public class TH07 : THBase
     {
+        private uint _pGuiImpl;
         private THState<uint> _pGuiImplState;
         private byte _difficulty, _mainShot, _subShot;
         private uint _score;
@@ -28,11 +29,15 @@ namespace SharpTori
             _borderBreakCount = 0;
         }
 
+        public override bool IsInGame()
+        {
+            return GetGuiImplPointer() != 0;
+        }
+
         public override bool IsNewGame()
         {
-            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0049FBF8 }, ref _pGuiImplState.State, sizeof(uint)))
-                Console.WriteLine("Failed to read memory of gui implementation pointer.");
-
+            _pGuiImplState.State = GetGuiImplPointer();
+            
             // A new gui implementation instance is allocated
             bool result = _pGuiImplState.Trigger((prev, curr) => prev != curr && curr != 0);
             _pGuiImplState.Update();
@@ -107,6 +112,13 @@ namespace SharpTori
             _cherryPlusState.Update();
 
             return _borderBreakCount;
+        }
+
+        private uint GetGuiImplPointer()
+        {
+            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0049FBF8 }, ref _pGuiImpl, sizeof(uint)))
+                Console.WriteLine("Failed to read memory of gui implementation pointer.");
+            return _pGuiImpl;
         }
     }
 }

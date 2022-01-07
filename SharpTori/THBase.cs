@@ -15,6 +15,7 @@ namespace SharpTori
 
         public abstract void Reset();
 
+        public abstract bool IsInGame();
         public abstract bool IsNewGame();
     }
 }
