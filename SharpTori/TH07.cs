@@ -11,7 +11,7 @@ namespace SharpTori
     /// </summary>
     public class TH07 : THBase
     {
-        private byte _isInGame;
+        private THState<uint> _pGuiImplState;
         private byte _difficulty, _mainShot, _subShot;
         private uint _score;
         private byte _continue;
@@ -23,6 +23,7 @@ namespace SharpTori
 
         public TH07(IntPtr handle) : base(handle)
         {
+            _pGuiImplState = new THState<uint>();
             _cherryPlusState = new THState<byte>();
         }
 
@@ -33,9 +34,10 @@ namespace SharpTori
 
         public override bool IsNewGame()
         {
-            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0134D9CC }, ref _isInGame, sizeof(byte)))
-                Console.WriteLine("Failed to read memory of in-game state.");
-            return _isInGame != 0;
+            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0049FBF8 }, ref _pGuiImplState.State, sizeof(uint)))
+                Console.WriteLine("Failed to read memory of gui implementation pointer.");
+            // A new gui implementation instance is allocated
+            return _pGuiImplState.Trigger((prev, curr) => prev != curr && curr != 0);
         }
 
         public byte GetDifficulty()

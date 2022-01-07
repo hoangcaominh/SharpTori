@@ -11,17 +11,16 @@ namespace SharpTori
     /// </summary>
     public class TH06 : THBase
     {
-        private byte _isMenu;
-        private byte _menuValue;
+        private THState<uint> _pGuiImplState;
         private byte _difficulty, _mainShot, _subShot;
         private uint _score;
         private THState<byte> _deathbombWindow;
         private int _missCount;
         private int _bombCount;
-        private readonly int[] _invalidMenu = new int[] { 1, 2, 10, 16 };
 
         public TH06(IntPtr handle) : base(handle)
         {
+            _pGuiImplState = new THState<uint>();
             _deathbombWindow = new THState<byte>();
         }
 
@@ -32,11 +31,10 @@ namespace SharpTori
 
         public override bool IsNewGame()
         {
-            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x006DC8F8 }, ref _isMenu, sizeof(byte)))
-                Console.WriteLine("Failed to read memory of menu state.");
-            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x006DC8B0 }, ref _menuValue, sizeof(byte)))
-                Console.WriteLine("Failed to read memory of menu value.");
-            return _isMenu == 0 && !_invalidMenu.Contains(_menuValue);
+            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0069BC34 }, ref _pGuiImplState.State, sizeof(uint)))
+                Console.WriteLine("Failed to read memory of gui implementation pointer.");
+            // A new gui implementation instance is allocated
+            return _pGuiImplState.Trigger((prev, curr) => prev != curr && curr != 0);
         }
 
         public byte GetDifficulty()
