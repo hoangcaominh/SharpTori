@@ -16,7 +16,7 @@ namespace SharpTori
             public int Red, Blue, Green, Rainbow;
         }
 
-        private byte _pMenu;
+        private THState<uint> _pGuiState;
         private byte _difficulty, _mainShot, _subShot;
         private uint _score;
         private byte _continue;
@@ -30,6 +30,7 @@ namespace SharpTori
 
         public TH12(IntPtr handle) : base(handle)
         {
+            _pGuiState = new THState<uint>();
             _playerState = new THState<byte>();
             _bombState = new THState<byte>();
             _vaultCount = new THState<uint>();
@@ -44,9 +45,10 @@ namespace SharpTori
 
         public override bool IsNewGame()
         {
-            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B4530 }, ref _pMenu, sizeof(uint)))
-                Console.WriteLine("Failed to read memory of menu pointer.");
-            return _pMenu == 0;
+            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B43E4 }, ref _pGuiState.State, sizeof(uint)))
+                Console.WriteLine("Failed to read memory of gui pointer.");
+            // A new gui instance is allocated
+            return _pGuiState.Trigger((prev, curr) => prev != curr && curr != 0);
         }
 
         public byte GetDifficulty()

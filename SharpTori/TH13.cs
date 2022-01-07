@@ -11,8 +11,7 @@ namespace SharpTori
     /// </summary>
     public class TH13 : THBase
     {
-
-        private byte _pMenu;
+        private THState<uint> _pGuiState;
         private byte _difficulty, _mainShot;
         private uint _score;
         private byte _continue;
@@ -25,6 +24,7 @@ namespace SharpTori
 
         public TH13(IntPtr handle) : base(handle)
         {
+            _pGuiState = new THState<uint>();
             _playerState = new THState<byte>();
             _bombState = new THState<byte>();
             _tranceState = new THState<byte>();
@@ -39,9 +39,10 @@ namespace SharpTori
 
         public override bool IsNewGame()
         {
-            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004C22E0 }, ref _pMenu, sizeof(uint)))
-                Console.WriteLine("Failed to read memory of menu pointer.");
-            return _pMenu == 0;
+            if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004C2190 }, ref _pGuiState.State, sizeof(uint)))
+                Console.WriteLine("Failed to read memory of gui pointer.");
+            // A new gui instance is allocated
+            return _pGuiState.Trigger((prev, curr) => prev != curr && curr != 0);
         }
 
         public byte GetDifficulty()
