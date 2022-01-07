@@ -37,7 +37,7 @@ namespace SharpTori
             _tranceCount = 0;
         }
 
-        public override bool IsInGame()
+        public override bool IsNewGame()
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004C22E0 }, ref _pMenu, sizeof(uint)))
                 Console.WriteLine("Failed to read memory of menu pointer.");

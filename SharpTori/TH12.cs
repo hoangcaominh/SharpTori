@@ -42,7 +42,7 @@ namespace SharpTori
             _ufoCount = new UFOCount { Red = 0, Blue = 0, Green = 0, Rainbow = 0 };
         }
 
-        public override bool IsInGame()
+        public override bool IsNewGame()
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B4530 }, ref _pMenu, sizeof(uint)))
                 Console.WriteLine("Failed to read memory of menu pointer.");

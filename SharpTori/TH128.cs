@@ -41,7 +41,7 @@ namespace SharpTori
             _medalCount = new MedalCount { Gold = 0, Silver = 0, Bronze = 0 };
         }
 
-        public override bool IsInGame()
+        public override bool IsNewGame()
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B8A9C }, ref _pMenu, sizeof(uint)))
                 Console.WriteLine("Failed to read memory of menu pointer.");

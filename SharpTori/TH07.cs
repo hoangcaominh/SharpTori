@@ -31,7 +31,7 @@ namespace SharpTori
             _borderBreakCount = 0;
         }
 
-        public override bool IsInGame()
+        public override bool IsNewGame()
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0134D9CC }, ref _isInGame, sizeof(byte)))
                 Console.WriteLine("Failed to read memory of in-game state.");

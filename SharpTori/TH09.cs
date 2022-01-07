@@ -18,7 +18,7 @@ namespace SharpTori
 
         }
 
-        public override bool IsInGame()
+        public override bool IsNewGame()
         {
             return false;
         }

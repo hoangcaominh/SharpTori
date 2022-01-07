@@ -44,7 +44,7 @@ namespace SharpTori
             _hyperCount = new HyperCount { Wolf = 0, Otter = 0, Eagle = 0, Neutral = 0, Break = 0 };
         }
 
-        public override bool IsInGame()
+        public override bool IsNewGame()
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x004B77F0 }, ref _pMenu, sizeof(uint)))
                 Console.WriteLine("Failed to read memory of menu pointer.");
