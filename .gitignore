@@ -363,5 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Exclude other side projects
-[Dd]emo/*
-[Tt]est/*
+[Dd]emo/
+[Tt]est/
