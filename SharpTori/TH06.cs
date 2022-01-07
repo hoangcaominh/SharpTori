@@ -33,8 +33,12 @@ namespace SharpTori
         {
             if (!MemoryReader.ReadMemory(Handle, new uint[] { 0x0069BC34 }, ref _pGuiImplState.State, sizeof(uint)))
                 Console.WriteLine("Failed to read memory of gui implementation pointer.");
+            
             // A new gui implementation instance is allocated
-            return _pGuiImplState.Trigger((prev, curr) => prev != curr && curr != 0);
+            bool result = _pGuiImplState.Trigger((prev, curr) => prev != curr && curr != 0);
+            _pGuiImplState.Update();
+
+            return result;
         }
 
         public byte GetDifficulty()
